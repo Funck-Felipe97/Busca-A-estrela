@@ -36,7 +36,7 @@ public class CriaMapa {
             for(int j = 0 ; j < tamanho ; ++j){
                 Random randomico = new Random();
                 int n = 0;
-                n = randomico.nextInt(4);         // Criação do terreno
+                n = randomico.nextInt(6);         // Criação do terreno
                 terreno = factory.values()[n].getTerreno(i , j);
                 
                 if(terreno instanceof NodeMoeda){   // Delimitar Moedas
@@ -59,35 +59,20 @@ public class CriaMapa {
     * @Method que faz as ligações entre os nós do grafo
     */
     private void criarNovoMapa(){
-       
         for(int i = 0 ; i < tamanho ; ++i){
             for(int j = 0; j < tamanho ; ++j){
-                if(!(terrenos.get(i).get(i) instanceof NodeParede)){
-                    if (j > 0) {
-                        if (!(terrenos.get(i).get(j - 1) instanceof NodeParede)) //terrenos.get(i).get(j).setParenteEsquerda(terrenos.get(i).get(j - 1));
-                        {
-                            terrenos.get(i).get(j).neighbors.add(terrenos.get(i).get(j - 1));
-                        }
-                    }
-                    if (i > 0) {
-                        if (!(terrenos.get(i - 1).get(j) instanceof NodeParede)) //terrenos.get(i).get(j).setParenteCima(terrenos.get(i - 1).get(j));
-                        {
-                            terrenos.get(i).get(j).neighbors.add(terrenos.get(i - 1).get(j));
-                        }
-                    }
-                    if (j < (tamanho - 1)) {
-                        if (!(terrenos.get(i).get(j + 1) instanceof NodeParede)) //terrenos.get(i).get(j).setParenteDireita(terrenos.get(i).get(j + 1));
-                        {
-                            terrenos.get(i).get(j).neighbors.add(terrenos.get(i).get(j + 1));
-                        }
-                    }
-                    if (i < (tamanho - 1)) {
-                        if (!(terrenos.get(i + 1).get(j) instanceof NodeParede)) //terrenos.get(i).get(j).setParenteBaixo(terrenos.get(i + 1).get(j));
-                        {
-                            terrenos.get(i).get(j).neighbors.add(terrenos.get(i + 1).get(j));
-                        }
-                    }
+                if (j > 0) {
+                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i).get(j - 1));
                 }
+                if (i > 0) {
+                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i - 1).get(j));
+                }
+                if (j < (tamanho - 1)) {
+                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i).get(j + 1));
+                }
+                if (i < (tamanho - 1)) {
+                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i + 1).get(j));
+                }   
             }
         }
         gerarListaNodes();

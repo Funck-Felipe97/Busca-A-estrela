@@ -2,10 +2,12 @@
 package Model;
 
 import Util.CalculaHeuristica;
+import java.awt.Graphics2D;
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.ImageIcon;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -33,6 +35,10 @@ public class Node {
     @Override
     public String toString() {
         return " {" + x + " , " + y + "}";
+    }
+    
+    public void renderizar(Graphics2D g , int espacoColuna , int espacoLinha){
+        g.drawImage(imagem.getImage() , espacoColuna + 50 , espacoLinha + 30 , 40 , 40 , null);
     }
     
 }
