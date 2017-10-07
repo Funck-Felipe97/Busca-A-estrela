@@ -29,7 +29,7 @@ public class CriaMapa {
         Node terreno = null;
         List<Node> colunas = null;
         int aux = 0;
-        
+         
         for(int i = 0 ; i < tamanho ; ++i){
             colunas = new ArrayList<Node>();
             terrenos.add(colunas);
@@ -62,16 +62,16 @@ public class CriaMapa {
         for(int i = 0 ; i < tamanho ; ++i){
             for(int j = 0; j < tamanho ; ++j){
                 if (j > 0) {
-                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i).get(j - 1));
+                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i).get(j - 1));
                 }
                 if (i > 0) {
-                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i - 1).get(j));
+                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i - 1).get(j));
                 }
                 if (j < (tamanho - 1)) {
-                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i).get(j + 1));
+                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i).get(j + 1));
                 }
                 if (i < (tamanho - 1)) {
-                    terrenos.get(i).get(j).neighbors.add(terrenos.get(i + 1).get(j));
+                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i + 1).get(j));
                 }   
             }
         }

@@ -3,11 +3,7 @@ package Busca;
 
 import Model.Node;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -15,65 +11,65 @@ import java.util.Set;
  */
 public class BuscaHeuristica{
  
-    public List<Node> aStar(Node start, Node goal) {
-        Set<Node> open = new HashSet<Node>();
-        Set<Node> closed = new HashSet<Node>();
+    public List<Node> aStar(Node inicio , Node destino) {
+        List<Node> abertos = new ArrayList<>();
+        List<Node> fechados = new ArrayList<>();
 
-        start.g = 0;
-        start.h = estimateDistance(start, goal);
-        start.f = start.h;
+        inicio.custoAtual = 0;
+        inicio.heuristica = estimateDistance(inicio , destino);
+        inicio.f = inicio.heuristica;
 
-        open.add(start);
+       abertos.add(inicio);
 
         while (true) {
             Node current = null;
 
-            if (open.size() == 0) {
+            if (abertos.isEmpty()) {
                 throw new RuntimeException("no route");
             }
 
-            for (Node node : open) {
+            for (Node node : abertos) {
                 if (current == null || node.f < current.f) {
                     current = node;
                 }
             }
 
-            if (current == goal) {
+            if (current == destino) {
                 break;
             }
 
-            open.remove(current);
-            closed.add(current);
+            abertos.remove(current);
+            fechados.add(current);
 
-            for (Node neighbor : current.neighbors) {
-                if (neighbor == null) {
+            for (Node no : current.adjacentes) {
+                if (no == null) {
                     continue;
                 }
 
-                int nextG = current.g + neighbor.cost;
+                int nextG = current.custoAtual + no.peso;
 
-                if (nextG < neighbor.g) {
-                    open.remove(neighbor);
-                    closed.remove(neighbor);
+                if (nextG < no.custoAtual) {
+                    abertos.remove(no);
+                    fechados.remove(no);
                 }
 
-                if (!open.contains(neighbor) && !closed.contains(neighbor)) {
-                    neighbor.g = nextG;
-                    neighbor.h = estimateDistance(neighbor, goal);
-                    neighbor.f = neighbor.g + neighbor.h;
-                    neighbor.parent = current;
-                    open.add(neighbor);
+                if (!abertos.contains(no) && !fechados.contains(no)) {
+                    no.custoAtual = nextG;
+                    no.heuristica = estimateDistance(no, destino);
+                    no.f = no.custoAtual + no.heuristica;
+                    no.pai = current;
+                    abertos.add(no);
                 }
             }
         }
 
         List<Node> nodes = new ArrayList<Node>();
-        Node current = goal;
-        while (current.parent != null) {
-            nodes.add(current);
-            current = current.parent;
+        Node atual = destino;
+        while (atual.pai != null) {
+            nodes.add(atual);
+            atual = atual.pai;
         }
-        nodes.add(start);
+        nodes.add(inicio);
 
         return nodes;
     }

@@ -4,7 +4,6 @@ package Busca;
 import Model.Node;
 import Model.NodeArenoso;
 import Model.NodePantado;
-import Model.Objetivo;
 import java.util.List;
 import javax.swing.JFrame;
 
