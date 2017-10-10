@@ -6,8 +6,11 @@ import Model.NodeMoeda;
 import Model.NodeParede;
 import Model.TerrenoFactory;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import javafx.print.Collation;
 
 /**
  *
@@ -19,7 +22,7 @@ public class CriaMapa {
     public final int tamanho = 10;
     public TerrenoFactory factory;
     public List<Node> listaNodes;
-
+   
     public CriaMapa(){
         this.terrenos = new ArrayList<>();
         criarGrafo();
@@ -53,6 +56,7 @@ public class CriaMapa {
             }
         }
         criarNovoMapa();
+ 
     }
     
     /*
@@ -75,19 +79,7 @@ public class CriaMapa {
                 }   
             }
         }
-        gerarListaNodes();
-        
+      
     }
-
-    private void gerarListaNodes() {
-        listaNodes = new ArrayList<>();
-        for(List<Node> linha : terrenos){
-            for(Node no : linha){
-                if(!(no instanceof NodeParede)){
-                    listaNodes.add(no);
-                }
-            }
-        }
-    }
-    
+  
 }

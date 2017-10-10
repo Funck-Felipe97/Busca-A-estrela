@@ -2,6 +2,7 @@
 package Busca;
 
 import Model.Node;
+import Model.NodeMoeda;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ public class BuscaHeuristica{
         List<Node> fechados = new ArrayList<>();
 
         inicio.custoAtual = 0;
-        inicio.heuristica = estimateDistance(inicio , destino);
+        inicio.heuristica = inicio.calcularHeuristica(destino);
         inicio.f = inicio.heuristica;
 
        abertos.add(inicio);
@@ -35,7 +36,7 @@ public class BuscaHeuristica{
             }
 
             if (current == destino) {
-                break;
+               break;
             }
 
             abertos.remove(current);
@@ -55,14 +56,17 @@ public class BuscaHeuristica{
 
                 if (!abertos.contains(no) && !fechados.contains(no)) {
                     no.custoAtual = nextG;
-                    no.heuristica = estimateDistance(no, destino);
+                    no.heuristica = no.calcularHeuristica(destino);
                     no.f = no.custoAtual + no.heuristica;
                     no.pai = current;
                     abertos.add(no);
                 }
             }
         }
-
+        return calcularCaminho(inicio, destino);
+    }
+    
+    public List<Node> calcularCaminho(Node inicio, Node destino ){
         List<Node> nodes = new ArrayList<Node>();
         Node atual = destino;
         while (atual.pai != null) {
@@ -70,12 +74,7 @@ public class BuscaHeuristica{
             atual = atual.pai;
         }
         nodes.add(inicio);
-
         return nodes;
-    }
-
-    public int estimateDistance(Node node1, Node node2) {
-        return Math.abs(node1.x - node2.x) + Math.abs(node1.y - node2.y);
     }
 
 }

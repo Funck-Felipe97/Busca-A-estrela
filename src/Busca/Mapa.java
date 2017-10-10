@@ -53,7 +53,11 @@ public class Mapa extends JPanel{
         botao.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                eventoBotao(e);
+                try {
+                    eventoBotao(e);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Mapa.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
@@ -64,17 +68,13 @@ public class Mapa extends JPanel{
     }
     
     // Evento Botao
-    private void eventoBotao(ActionEvent e) {
+    private void eventoBotao(ActionEvent e) throws InterruptedException {
         int x = Integer.valueOf(tfX.getText());
         int y = Integer.valueOf(tfY.getText());
         paintComponent(g);
         if(!(nodes.get(x).get(x) instanceof NodeParede)){
-            try{
-                List<Node> caminho = new BuscaHeuristica().aStar(nodes.get(0).get(0) , nodes.get(x).get(y)); 
-                movimentarAgente(caminho);
-            }catch(Exception erro){
-                JOptionPane.showMessageDialog(this , "Erro :(((");
-            }    
+            List<Node> caminho = new BuscaHeuristica().aStar(nodes.get(0).get(0) , nodes.get(x).get(y)); 
+            movimentarAgente(caminho);   
         }else{
             JOptionPane.showMessageDialog(this , "Ponto inacessivel,\n é uma parede");
         }
