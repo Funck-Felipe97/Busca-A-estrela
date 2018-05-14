@@ -6,13 +6,15 @@ import Model.NodeMoeda;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  *
  * @author funck
  */
+
 public class BuscaHeuristica{
  
-    public List<Node> aStar(Node inicio , Node destino) {
+    public List<Node> aEstrela(Node inicio , Node destino) {
         List<Node> abertos = new ArrayList<>();
         List<Node> fechados = new ArrayList<>();
 
@@ -20,45 +22,38 @@ public class BuscaHeuristica{
         inicio.heuristica = inicio.calcularHeuristica(destino);
         inicio.f = inicio.heuristica;
 
-       abertos.add(inicio);
+        abertos.add(inicio);
 
         while (true) {
-            Node current = null;
+            Node atual = null;
 
             if (abertos.isEmpty()) {
-                throw new RuntimeException("no route");
+                throw new RuntimeException("nenhum caminho econtrado!");
             }
 
             for (Node node : abertos) {
-                if (current == null || node.f < current.f) {
-                    current = node;
+                if (atual == null || node.f < atual.f) {
+                    atual = node;
                 }
             }
 
-            if (current == destino) {
+            if (atual == destino) {  //Termina a busca
                break;
             }
 
-            abertos.remove(current);
-            fechados.add(current);
+            abertos.remove(atual);
+            fechados.add(atual);
 
-            for (Node no : current.adjacentes) {
+            for (Node no : atual.adjacentes) {
                 if (no == null) {
                     continue;
                 }
-
-                int nextG = current.custoAtual + no.peso;
-
-                if (nextG < no.custoAtual) {
-                    abertos.remove(no);
-                    fechados.remove(no);
-                }
-
-                if (!abertos.contains(no) && !fechados.contains(no)) {
-                    no.custoAtual = nextG;
+             
+                if (!fechados.contains(no)) {
+                    no.custoAtual = atual.custoAtual + no.peso;
                     no.heuristica = no.calcularHeuristica(destino);
                     no.f = no.custoAtual + no.heuristica;
-                    no.pai = current;
+                    no.pai = atual;
                     abertos.add(no);
                 }
             }

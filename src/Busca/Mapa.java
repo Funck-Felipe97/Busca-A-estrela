@@ -19,12 +19,13 @@ import javax.swing.JPanel;
 
 public class Mapa extends JPanel{
     
-    private List<List<Node>> nodes;
+    private Node[][] nodes;
     private Button botao;
     private TextField tfX;
     private TextField tfY;
     private Graphics2D g;
     private JLabel agente;
+    private Button novaBusca;
    
     public Mapa(){
         iniciarComponentes();
@@ -61,6 +62,18 @@ public class Mapa extends JPanel{
             }
         });
         
+        novaBusca = new Button("Nova Busca");
+        novaBusca.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                 novaBusca(e);
+            }
+        });
+        
+        novaBusca.setBounds(520 , 350 , 100 , 40);
+        
+        add(novaBusca);
+        
         agente = new JLabel(new ImageIcon(getClass().getResource("/imagem/agente.png")));
         agente.setBounds(10, 30 , 40 , 40);
         add(agente);
@@ -71,10 +84,14 @@ public class Mapa extends JPanel{
     private void eventoBotao(ActionEvent e) throws InterruptedException {
         int x = Integer.valueOf(tfX.getText());
         int y = Integer.valueOf(tfY.getText());
-        paintComponent(g);
-        if(!(nodes.get(x).get(x) instanceof NodeParede)){
-            List<Node> caminho = new BuscaHeuristica().aStar(nodes.get(0).get(0) , nodes.get(x).get(y)); 
-            movimentarAgente(caminho);   
+        
+        if(!(nodes[x][y] instanceof NodeParede)){
+            try{
+                List<Node> caminho = new BuscaHeuristica().aEstrela(nodes[0][0] , nodes[x][y]); 
+                movimentarAgente(caminho);   
+            }catch(Exception erro){
+                JOptionPane.showMessageDialog(this , "é impossivel alcançar este ponto");
+            }
         }else{
             JOptionPane.showMessageDialog(this , "Ponto inacessivel,\n é uma parede");
         }
@@ -83,6 +100,7 @@ public class Mapa extends JPanel{
     private void movimentarAgente(List<Node> caminho) throws InterruptedException{
         
         Collections.reverse(caminho);
+        
         new Thread(()->{
             for(Node n : caminho){
                 agente.setBounds(50 + n.posMapaX , 30 + n.posMapaY , 40 , 40);
@@ -104,14 +122,20 @@ public class Mapa extends JPanel{
         int contColuna = 0;
         int contLinha = 0;
 
-        for (int i = 0; i < nodes.size(); ++i) {
-            for (int j = 0; j < nodes.size(); ++j) {
-                nodes.get(i).get(j).renderizar(g, contColuna, contLinha);
+        for (int i = 0; i < 10; ++i) {
+            for (int j = 0; j < 10; ++j) {
+                nodes[i][j].renderizar(g, contColuna, contLinha);
                 contColuna += 40;
             }
             contLinha += 40;
             contColuna = 0;
         }
+    }
+    
+    private void novaBusca(ActionEvent e){
+        nodes = new CriaMapa().terrenos;
+        agente.setBounds(10, 30 , 40 , 40);
+        paintComponent(getGraphics());
     }
     
 }

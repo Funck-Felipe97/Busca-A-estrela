@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  * @author funck
  */
 
-public class Node implements Comparable<Object>{
+public class Node{
      
     public ImageIcon imagem;
     public List<Node> adjacentes = new ArrayList<Node>();
@@ -48,21 +48,4 @@ public class Node implements Comparable<Object>{
          return Math.abs(x - no.x) + Math.abs(y - no.y);
     }
 
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int compareTo(Object o) {
-         Node obj = (Node) o;
-         if((x + y) > (obj.x + obj.y)){
-             return 1;
-         }
-         if((x + y) < (obj.x + obj.y)){
-             return -1;
-         }
-         return 0;
-    }
-    
-    
 }

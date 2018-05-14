@@ -7,10 +7,9 @@ import Model.NodeParede;
 import Model.TerrenoFactory;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import javafx.print.Collation;
+
 
 /**
  *
@@ -18,24 +17,20 @@ import javafx.print.Collation;
  */
 public class CriaMapa {
     
-    public List<List<Node>> terrenos;
+    public Node[][] terrenos;
     public final int tamanho = 10;
     public TerrenoFactory factory;
-    public List<Node> listaNodes;
-   
+    
     public CriaMapa(){
-        this.terrenos = new ArrayList<>();
+        terrenos = new Node[tamanho][tamanho];
         criarGrafo();
     }
     
     private void criarGrafo(){
         Node terreno = null;
-        List<Node> colunas = null;
         int aux = 0;
          
         for(int i = 0 ; i < tamanho ; ++i){
-            colunas = new ArrayList<Node>();
-            terrenos.add(colunas);
             for(int j = 0 ; j < tamanho ; ++j){
                 Random randomico = new Random();
                 int n = 0;
@@ -44,14 +39,14 @@ public class CriaMapa {
                 
                 if(terreno instanceof NodeMoeda){   // Delimitar Moedas
                     if(aux < 5){
-                        colunas.add(terreno);
+                        terrenos[i][j] = terreno;
                         aux++;
                     }else{
                         terreno = factory.values()[0].getTerreno(i , j);
-                        colunas.add(terreno);
+                        terrenos[i][j] = terreno;
                     }
                 }else{
-                    colunas.add(terreno);
+                    terrenos[i][j] = terreno;
                 }   
             }
         }
@@ -60,23 +55,29 @@ public class CriaMapa {
     }
     
     /*
-    * @Method que faz as ligações entre os nós do grafo
+    * @Metodo que faz as ligações entre os nós do grafo
     */
+    
     private void criarNovoMapa(){
         for(int i = 0 ; i < tamanho ; ++i){
             for(int j = 0; j < tamanho ; ++j){
-                if (j > 0) {
-                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i).get(j - 1));
+                if(!(terrenos[i][j] instanceof NodeParede)){
+                    if (j > 0) 
+                        if(!(terrenos[i][j - 1] instanceof NodeParede))
+                            terrenos[i][j].adjacentes.add(terrenos[i][j - 1]);
+                        
+                    if (i > 0)
+                        if(!(terrenos[i - 1][j] instanceof NodeParede))
+                            terrenos[i][j].adjacentes.add(terrenos[i - 1][j]);
+                    
+                    if (j < (tamanho - 1)) 
+                        if(!(terrenos[i][j + 1] instanceof NodeParede))
+                            terrenos[i][j].adjacentes.add(terrenos[i][j + 1]);
+                    
+                    if (i < (tamanho - 1)) 
+                        if(!(terrenos[i + 1][j] instanceof NodeParede))
+                            terrenos[i][j].adjacentes.add(terrenos[i + 1][j]);         
                 }
-                if (i > 0) {
-                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i - 1).get(j));
-                }
-                if (j < (tamanho - 1)) {
-                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i).get(j + 1));
-                }
-                if (i < (tamanho - 1)) {
-                    terrenos.get(i).get(j).adjacentes.add(terrenos.get(i + 1).get(j));
-                }   
             }
         }
       
